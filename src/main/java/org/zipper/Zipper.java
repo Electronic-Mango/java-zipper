@@ -11,18 +11,12 @@ import java.util.stream.IntStream;
 
 public class Zipper {
     public static <T> List<List<T>> zip(final List<List<T>> lists) {
-        if (lists.isEmpty()) {
-            return new ArrayList<>();
-        }
-        final var size = Collections.min(lists, Comparator.comparingInt(List::size)).size();
-        return IntStream.range(0, size)
-                .mapToObj(i -> lists.stream().map(list -> list.get(i)).collect(Collectors.toList()))
-                .collect(Collectors.toList());
+        return lists.stream().collect(zipCollector());
     }
 
     @SafeVarargs
     public static <T> List<List<T>> zip(final List<T>... lists) {
-        return zip(Arrays.asList(lists));
+        return Arrays.stream(lists).collect(zipCollector());
     }
 
     public static <T> Collector<List<T>, List<List<T>>, List<List<T>>> zipCollector() {
@@ -31,7 +25,7 @@ public class Zipper {
 
     private static <T> void zipCollectorAccumulator(final List<List<T>> target, final List<T> source) {
         if (target.isEmpty()) {
-            target.addAll(zip(source));
+            target.addAll(source.stream().map(List::of).map(ArrayList::new).toList());
             return;
         }
         final var size = Math.min(target.size(), source.size());
