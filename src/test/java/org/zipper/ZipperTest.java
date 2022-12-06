@@ -1,4 +1,4 @@
-package org.javazipper;
+package org.zipper;
 
 import org.junit.jupiter.api.Test;
 

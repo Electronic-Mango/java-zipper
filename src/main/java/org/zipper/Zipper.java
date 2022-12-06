@@ -1,4 +1,4 @@
-package org.javazipper;
+package org.zipper;
 
 import java.util.Collections;
 import java.util.Comparator;
