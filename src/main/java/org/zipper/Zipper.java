@@ -33,11 +33,7 @@ public class Zipper {
     }
 
     private static <T> List<List<T>> zipCollectorCombiner(final List<List<T>> list1, final List<List<T>> list2) {
-        final var size = Math.min(list1.size(), list2.size());
-        final var resultingList = List.copyOf(list1.subList(0, size));
-        for (int i = 0; i < size; ++i) {
-            resultingList.get(i).addAll(list2.get(i));
-        }
-        return resultingList;
+        list2.forEach(list -> zipCollectorAccumulator(list1, list));
+        return list1;
     }
 }
