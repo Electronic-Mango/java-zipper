@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.stream.Collector;
 
 public final class Zipper {
+    private Zipper() {
+        throw new UnsupportedOperationException();
+    }
+
     public static <T> List<List<T>> zip(final List<List<T>> lists) {
         return lists.stream().collect(zipCollector());
     }
