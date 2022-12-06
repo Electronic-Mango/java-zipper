@@ -144,4 +144,30 @@ class ZipperTest {
         //then
         assertTrue(output.isEmpty());
     }
+
+    @Test
+    void shouldReturnMutableListOnZip() {
+        //given
+        final var input = List.of(List.of(1, 2), List.of(3, 4), List.of(5, 6));
+
+        //when
+        final var output = Zipper.zip(input);
+
+        //then
+        assertDoesNotThrow(() -> output.forEach(List::clear));
+        assertDoesNotThrow(output::clear);
+    }
+
+    @Test
+    void shouldReturnMutableListOnCollect() {
+        //given
+        final var input = List.of(List.of(1, 2), List.of(3, 4), List.of(5, 6));
+
+        //when
+        final var output = input.stream().collect(Zipper.zipCollector());
+
+        //then
+        assertDoesNotThrow(() -> output.forEach(List::clear));
+        assertDoesNotThrow(output::clear);
+    }
 }
