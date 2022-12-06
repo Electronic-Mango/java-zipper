@@ -2,14 +2,10 @@ package org.zipper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class Zipper {
+public final class Zipper {
     public static <T> List<List<T>> zip(final List<List<T>> lists) {
         return lists.stream().collect(zipCollector());
     }
