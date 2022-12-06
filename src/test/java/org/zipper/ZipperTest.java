@@ -170,6 +170,7 @@ class ZipperTest {
         assertDoesNotThrow(() -> output.forEach(List::clear));
         assertDoesNotThrow(output::clear);
     }
+
     @Test
     void shouldCorrectlyVarargZipSquareMatrix() {
         //when
