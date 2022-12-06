@@ -63,7 +63,7 @@ class ZipperTest {
     @Test
     void shouldZipToEmptyListForEmptyInput() {
         //when
-        final var output = Zipper.zip(Collections.emptyList());
+        final var output = Zipper.zip(Collections.<List<Integer>>emptyList());
 
         //then
         assertTrue(output.isEmpty());
@@ -165,6 +165,83 @@ class ZipperTest {
 
         //when
         final var output = input.stream().collect(Zipper.zipCollector());
+
+        //then
+        assertDoesNotThrow(() -> output.forEach(List::clear));
+        assertDoesNotThrow(output::clear);
+    }
+    @Test
+    void shouldCorrectlyVarargZipSquareMatrix() {
+        //when
+        final var output = Zipper.zip(List.of(1, 2, 3), List.of(4, 5, 6), List.of(7, 8, 9));
+
+        //then
+        final var expectedOutput = List.of(List.of(1, 4, 7), List.of(2, 5, 8), List.of(3, 6, 9));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldCorrectlyVarargZipRectangularHorizontalMatrix() {
+        //when
+        final var output = Zipper.zip(List.of("1", "2", "3"), List.of("4", "5", "6"));
+
+        //then
+        final var expectedOutput = List.of(List.of("1", "4"), List.of("2", "5"), List.of("3", "6"));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldCorrectlyVarargZipRectangularVerticalMatrix() {
+        //when
+        final var output = Zipper.zip(List.of("A", "B"), List.of("C", "D"), List.of("E", "F"));
+
+        //then
+        final var expectedOutput = List.of(List.of("A", "C", "E"), List.of("B", "D", "F"));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldVarargZipSingleSublist() {
+        //when
+        final var output = Zipper.zip(List.of(1, 2, 3, 4, 5));
+
+        //then
+        final var expectedOutput = List.of(List.of(1), List.of(2), List.of(3), List.of(4), List.of(5));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldVarargZipToEmptyListIfSublistIsEmpty() {
+        //when
+        final var output = Zipper.zip(List.of(1.1, 2.2, 3.3), List.of(4.4, 5.5, 6.6), Collections.emptyList());
+
+        //then
+        assertTrue(output.isEmpty());
+    }
+
+    @Test
+    void shouldUseSmallestSubsetForVarargZipping() {
+        //when
+        final var output = Zipper.zip(List.of('A', 'B', 'C'), List.of('D', 'E'), List.of('F'));
+
+        //then
+        final var expectedOutput = List.of(List.of('A', 'D', 'F'));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldVarargZipToEmptyListForEmptyInput() {
+        //when
+        final var output = Zipper.zip();
+
+        //then
+        assertTrue(output.isEmpty());
+    }
+
+    @Test
+    void shouldReturnMutableListOnVarargZip() {
+        //when
+        final var output = Zipper.zip(List.of(1, 2), List.of(3, 4), List.of(5, 6));
 
         //then
         assertDoesNotThrow(() -> output.forEach(List::clear));

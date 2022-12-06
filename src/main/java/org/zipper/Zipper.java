@@ -1,6 +1,7 @@
 package org.zipper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,6 +18,11 @@ public class Zipper {
         return IntStream.range(0, size)
                 .mapToObj(i -> lists.stream().map(list -> list.get(i)).collect(Collectors.toList()))
                 .collect(Collectors.toList());
+    }
+
+    @SafeVarargs
+    public static <T> List<List<T>> zip(final List<T>... lists) {
+        return zip(Arrays.asList(lists));
     }
 
     public static <T> Collector<List<T>, List<List<T>>, List<List<T>>> zipCollector() {
