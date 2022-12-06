@@ -31,7 +31,7 @@ public class Zipper {
 
     private static <T> void zipCollectorAccumulator(final List<List<T>> target, final List<T> source) {
         if (target.isEmpty()) {
-            target.addAll(zip(List.of(source)));
+            target.addAll(zip(source));
             return;
         }
         final var size = Math.min(target.size(), source.size());
