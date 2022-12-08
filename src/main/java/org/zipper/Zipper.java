@@ -26,11 +26,13 @@ public final class Zipper {
      * <pre>
      *     lists.stream().collect(Zipper.zipCollector());
      * </pre>
+     * Resulting list is a new list, not a view of the input.
+     * <p>
      * See {@link Zipper} for more details regarding zipping.
      *
      * @param lists list of lists to zip
      * @param <T>   type stored in provided lists
-     * @return zipped input
+     * @return zipped input, as a new list
      */
     public static <T> List<List<T>> zip(final List<List<T>> lists) {
         return lists.stream().collect(zipCollector());
@@ -42,11 +44,13 @@ public final class Zipper {
      *     Arrays.stream(lists).collect(Zipper.zipCollector());
      *     Zipper.zip(Arrays.asList(lists));
      * </pre>
+     * Resulting list is a new list, not a view of the input.
+     * <p>
      * See {@link Zipper} for more details regarding zipping.
      *
      * @param lists multiple lists to zip, or an array of lists
      * @param <T>   type stored in provided lists
-     * @return zipped input
+     * @return zipped input, as a new list
      */
     @SafeVarargs
     public static <T> List<List<T>> zip(final List<T>... lists) {
@@ -59,6 +63,8 @@ public final class Zipper {
      *     Stream.of(List.of(1, 2, 3), List.of(4, 5, 6)).collect(zipCollector());
      * </pre>
      * will result in [[1, 4], [2, 5], [3, 6]].
+     * <p>
+     * Result of collecting is a new list of lists.
      *
      * @param <T> type stored in lists in stream
      * @return collector used to zipping lists as Stream API elements
