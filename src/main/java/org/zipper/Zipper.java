@@ -65,6 +65,9 @@ public final class Zipper {
      * will result in [[1, 4], [2, 5], [3, 6]].
      * <p>
      * Result of collecting is a new, mutable list of lists.
+     * <p>
+     * <b>Since order of output elements is correlated with order of input elements
+     * using unordered and/or parallel streams might cause unexpected results!</b>
      *
      * @param <T> type stored in lists in stream
      * @return collector used to zipping lists as Stream API elements
