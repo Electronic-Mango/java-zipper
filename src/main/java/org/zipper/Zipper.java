@@ -26,7 +26,7 @@ public final class Zipper {
      * <pre>
      *     lists.stream().collect(Zipper.zipCollector());
      * </pre>
-     * Resulting list is a new list, not a view of the input.
+     * Resulting list is a new, mutable list, not a view of the input.
      * <p>
      * See {@link Zipper} for more details regarding zipping.
      *
@@ -44,7 +44,7 @@ public final class Zipper {
      *     Arrays.stream(lists).collect(Zipper.zipCollector());
      *     Zipper.zip(Arrays.asList(lists));
      * </pre>
-     * Resulting list is a new list, not a view of the input.
+     * Resulting list is a new, mutable list, not a view of the input.
      * <p>
      * See {@link Zipper} for more details regarding zipping.
      *
@@ -64,7 +64,7 @@ public final class Zipper {
      * </pre>
      * will result in [[1, 4], [2, 5], [3, 6]].
      * <p>
-     * Result of collecting is a new list of lists.
+     * Result of collecting is a new, mutable list of lists.
      *
      * @param <T> type stored in lists in stream
      * @return collector used to zipping lists as Stream API elements
