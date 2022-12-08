@@ -1,4 +1,4 @@
-package org.zipper;
+package org.electronicmango.zipper;
 
 import org.junit.jupiter.api.Test;
 
