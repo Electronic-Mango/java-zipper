@@ -3,6 +3,18 @@
 This is a basic Java library providing Python-style "zip" functionality for lists.
 
 
+## Installation
+
+Library is available in Maven Central, you can add this bit in `dependencies` section of `pom.xml`:
+```xml
+<dependency>
+    <groupId>io.github.electronic-mango</groupId>
+    <artifactId>zipper</artifactId>
+    <version>1.2</version>
+</dependency>
+```
+
+
 ## Zipping
 
 "Zip" is an operation converting multiple lists into new lists such as:
