@@ -1,5 +1,8 @@
 # Java Zipper
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.electronic-mango/zipper.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22io.github.electronic-mango%22%20AND%20a%3A%22zipper%22)
+[![Maven CI](https://github.com/Electronic-Mango/java-zipper/actions/workflows/maven-verify.yml/badge.svg)](https://github.com/Electronic-Mango/java-zipper/actions/workflows/maven-verify.yml)
+
 This is a basic Java library providing Python-style "zip" functionality for lists.
 
 
