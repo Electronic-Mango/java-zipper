@@ -26,6 +26,13 @@
         <url>git@github.com:Electronic-Mango/java-zipper.git</url>
     </scm>
 
+    <developers>
+        <developer>
+            <name>Electronic Mango</name>
+            <url>https://github.com/Electronic-Mango</url>
+        </developer>
+    </developers>
+
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
