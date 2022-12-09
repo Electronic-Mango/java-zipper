@@ -17,9 +17,7 @@ import java.util.stream.Collector;
  * If any of inner list has size 0, or empty list is provided, then result will be an empty list.
  */
 public final class Zipper {
-    private Zipper() {
-        throw new UnsupportedOperationException();
-    }
+    private Zipper() { }
 
     /**
      * Zip provided list of lists. Equivalent to:
