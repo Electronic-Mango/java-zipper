@@ -250,4 +250,34 @@ class ZipperTest {
         assertDoesNotThrow(() -> output.forEach(List::clear));
         assertDoesNotThrow(output::clear);
     }
+
+    @Test
+    void shouldCorrectlyCollectParallelStream() {
+        //given
+        final var input = List.of(
+                List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0),
+                List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0),
+                List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0),
+                List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0),
+                List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
+        );
+
+        //when
+        final var output = input.stream().parallel().collect(Zipper.zipCollector());
+
+        //then
+        final var expectedOutput = List.of(
+                List.of(1, 1, 1, 1, 1),
+                List.of(2, 2, 2, 2, 2),
+                List.of(3, 3, 3, 3, 3),
+                List.of(4, 4, 4, 4, 4),
+                List.of(5, 5, 5, 5, 5),
+                List.of(6, 6, 6, 6, 6),
+                List.of(7, 7, 7, 7, 7),
+                List.of(8, 8, 8, 8, 8),
+                List.of(9, 9, 9, 9, 9),
+                List.of(0, 0, 0, 0, 0)
+        );
+        assertEquals(expectedOutput, output);
+    }
 }
