@@ -18,9 +18,5 @@ jobs:
           java-version: '19'
           distribution: 'temurin'
           cache: maven
-      - name: Build with Maven
-        run: mvn -B -U clean test jacoco:report
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Code coverage
+        run: mvn -B -U clean test jacoco:report coveralls:report -DrepoToken=${{ secrets.COVERALLS_TOKEN }}
