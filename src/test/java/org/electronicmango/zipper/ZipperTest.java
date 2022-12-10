@@ -315,4 +315,48 @@ class ZipperTest {
         //when
         assertThrows(NullPointerException.class, () -> input.stream().collect(Zipper.zipCollector()));
     }
+
+    @Test
+    void shouldZipCorrectlySpecificListImplementation() {
+        //given
+        final var subList1 = new ArrayList<>(List.of(1, 2, 3));
+        final var subList2 = new ArrayList<>(List.of(1, 2, 3));
+        final var input = new ArrayList<>(List.of(subList1, subList2));
+
+        //when
+        final var output = Zipper.zip(input);
+
+        //then
+        final var expectedOutput = List.of(List.of(1, 1), List.of(2, 2), List.of(3, 3));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldVarargZipCorrectlySpecificListImplementation() {
+        //given
+        final var subList1 = new ArrayList<>(List.of("1", "2", "3"));
+        final var subList2 = new ArrayList<>(List.of("1", "2", "3"));
+
+        //when
+        final var output = Zipper.zip(subList1, subList2);
+
+        //then
+        final var expectedOutput = List.of(List.of("1", "1"), List.of("2", "2"), List.of("3", "3"));
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldCollectCorrectlySpecificListImplementation() {
+        //given
+        final var subList1 = new ArrayList<>(List.of('1', '2', '3'));
+        final var subList2 = new ArrayList<>(List.of('1', '2', '3'));
+        final var input = new ArrayList<>(List.of(subList1, subList2));
+
+        //when
+        final var output = input.stream().collect(Zipper.zipCollector());
+
+        //then
+        final var expectedOutput = List.of(List.of('1', '1'), List.of('2', '2'), List.of('3', '3'));
+        assertEquals(expectedOutput, output);
+    }
 }

@@ -18,7 +18,8 @@ import java.util.stream.Collector;
  * If any of inner list has size 0, or empty list is provided, then result will be an empty list.
  */
 public final class Zipper {
-    private Zipper() { }
+    private Zipper() {
+    }
 
     /**
      * Zip provided list of lists. Equivalent to:
@@ -36,7 +37,7 @@ public final class Zipper {
      * @return zipped input, as a new list
      * @throws NullPointerException when either one of sub-lists is null, or if main argument is null
      */
-    public static <T> List<List<T>> zip(final List<List<T>> lists) {
+    public static <T> List<List<T>> zip(final List<? extends List<T>> lists) {
         Objects.requireNonNull(lists);
         return lists.stream().peek(Objects::requireNonNull).collect(zipCollector());
     }
