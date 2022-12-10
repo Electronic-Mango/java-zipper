@@ -29,11 +29,11 @@ Library is available in [Maven Central](https://search.maven.org/artifact/io.git
 Resulting i-th list will have elements at i-th index in the source lists.
 You can also think about it as selecting columns from provided rows.
 
-If input lists aren't all the same lenght, then smallest possible subset is selected. For example:
+If input lists aren't all the same length, then smallest possible subset is selected. For example:
 ```java
 [[1, 2, 3, 4], [5, 6, 7], [8, 9]] => [[1, 5, 8], [2, 6, 9]]
 ```
-Result only has two lists, as that's the size of smallest input list. Above operation is equivalent to zipping: `[[1, 2], [5, 6], [8, 9]]`.
+Result only has two lists, as that's the size of the smallest input list. Above operation is equivalent to zipping: `[[1, 2], [5, 6], [8, 9]]`.
 
 If one of input list is empty (or input is just an empty list), then result will also be an empty list.
 
