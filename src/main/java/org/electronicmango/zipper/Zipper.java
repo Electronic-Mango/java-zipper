@@ -3,6 +3,7 @@ package org.electronicmango.zipper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collector;
 
 /**
@@ -27,13 +28,17 @@ public final class Zipper {
      * Resulting list is a new, mutable list, not a view of the input.
      * <p>
      * See {@link Zipper} for more details regarding zipping.
+     * <p>
+     * This method will throw {@link NullPointerException} if one of sub-lists is null, or if main argument is null.
      *
      * @param lists list of lists to zip
      * @param <T>   type stored in provided lists
      * @return zipped input, as a new list
+     * @throws NullPointerException when either one of sub-lists is null, or if main argument is null
      */
     public static <T> List<List<T>> zip(final List<List<T>> lists) {
-        return lists.stream().collect(zipCollector());
+        Objects.requireNonNull(lists);
+        return lists.stream().peek(Objects::requireNonNull).collect(zipCollector());
     }
 
     /**
@@ -45,14 +50,18 @@ public final class Zipper {
      * Resulting list is a new, mutable list, not a view of the input.
      * <p>
      * See {@link Zipper} for more details regarding zipping.
+     * <p>
+     * This method will throw {@link NullPointerException} if one of received lists is null.
      *
      * @param lists multiple lists to zip, or an array of lists
      * @param <T>   type stored in provided lists
      * @return zipped input, as a new list
+     * @throws NullPointerException when either one of received lists is null
      */
     @SafeVarargs
     public static <T> List<List<T>> zip(final List<T>... lists) {
-        return Arrays.stream(lists).collect(zipCollector());
+        Objects.requireNonNull(lists);
+        return Arrays.stream(lists).peek(Objects::requireNonNull).collect(zipCollector());
     }
 
     /**
@@ -66,6 +75,8 @@ public final class Zipper {
      * <p>
      * <b>Since order of output elements is correlated with order of input elements
      * using unordered and/or parallel streams might cause unexpected results!</b>
+     * <p>
+     * Returned collector will throw {@link NullPointerException} is one of stream elements is null.
      *
      * @param <T> type stored in lists in stream
      * @return collector used to zipping lists as Stream API elements
@@ -75,6 +86,7 @@ public final class Zipper {
     }
 
     private static <T> void zipCollectorAccumulator(final List<List<T>> target, final List<T> source) {
+        Objects.requireNonNull(source);
         if (target.isEmpty()) {
             target.addAll(source.stream().map(List::of).map(ArrayList::new).toList());
             return;

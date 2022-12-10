@@ -2,12 +2,11 @@ package org.electronicmango.zipper;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ZipperTest {
     @Test
@@ -279,5 +278,41 @@ class ZipperTest {
                 List.of(0, 0, 0, 0, 0)
         );
         assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    void shouldThrowNullPointerExceptionWhenOneOfListsIsNull() {
+        //given
+        final var input = new ArrayList<List<Integer>>();
+        input.add(List.of(1, 2, 3));
+        input.add(null);
+        input.add(List.of(4, 5, 6));
+
+        //when
+        assertThrows(NullPointerException.class, () -> Zipper.zip(input));
+    }
+
+    @Test
+    void shouldThrowNullPointerExceptionForNullArgument() {
+        //when
+        assertThrows(NullPointerException.class, () -> Zipper.zip((List<List<Object>>) null));
+    }
+
+    @Test
+    void shouldThrowNullPointerExceptionWhenOneOfVarargListsIsNull() {
+        //when
+        assertThrows(NullPointerException.class, () -> Zipper.zip(List.of('A', 'B'), null));
+    }
+
+    @Test
+    void shouldThrowNullPointerExceptionWhenOneOfCollectedElementsIsNull() {
+        //given
+        final var input = new ArrayList<List<Integer>>();
+        input.add(List.of(1, 2, 3));
+        input.add(null);
+        input.add(List.of(4, 5, 6));
+
+        //when
+        assertThrows(NullPointerException.class, () -> input.stream().collect(Zipper.zipCollector()));
     }
 }

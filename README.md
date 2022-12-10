@@ -22,7 +22,7 @@ Library is available in Maven Central, you can add this bit in `dependencies` se
 ## Zipping
 
 "Zip" is an operation converting multiple lists into new lists such as:
-```Java
+```java
 [[1, 2, 3], [4, 5, 6]] => [[1, 4], [2, 5], [3, 6]]
 ```
 Resulting i-th list will have elements at i-th index in the source lists.
@@ -75,6 +75,12 @@ final output = Stream.of(List.of(1, 1, 1), List.of(2, 2, 2)).collect(Zipper.zipC
 // output is [[1, 2], [1, 2], [1, 2]]
 ```
 
-**Since order of output elements is corelated to order of input elements using unordered and/or parallel streams might might cause unexpected results!**
+**Since order of output elements is correlated to order of input elements using unordered and/or parallel streams might cause unexpected results!**
 
 Calling two previous methods is equivalent to streaming their inputs and using this collector.
+
+
+### `NullPointerException`
+
+All three methods will throw `NullPointerException` if one of zipped lists is null, or if main argument is null in case of zipping list of lists.
+`zipCollector()` won't throw `NullPointerException` directly, however applying returned collector to a stream will.
