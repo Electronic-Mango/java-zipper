@@ -1,6 +1,6 @@
 # Java Zipper
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.electronic-mango/zipper.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22io.github.electronic-mango%22%20AND%20a%3A%22zipper%22)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.electronic-mango/zipper.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.electronic-mango%22%20AND%20a:%22zipper%22)
 [![Maven CI](https://github.com/Electronic-Mango/java-zipper/actions/workflows/maven-verify.yml/badge.svg)](https://github.com/Electronic-Mango/java-zipper/actions/workflows/maven-verify.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Electronic-Mango/java-zipper/badge.svg?branch=main)](https://coveralls.io/github/Electronic-Mango/java-zipper?branch=main)
 
@@ -9,7 +9,7 @@ This is a basic Java library providing Python-style "zip" functionality for list
 
 ## Installation
 
-Library is available in Maven Central, you can add this bit in `dependencies` section of `pom.xml`:
+Library is available in [Maven Central](https://search.maven.org/artifact/io.github.electronic-mango/zipper), you can add this bit in `dependencies` section of `pom.xml`:
 ```xml
 <dependency>
     <groupId>io.github.electronic-mango</groupId>
