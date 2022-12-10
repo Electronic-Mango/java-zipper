@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.Collector;
 
 /**
@@ -18,8 +19,7 @@ import java.util.stream.Collector;
  * If any of inner list has size 0, or empty list is provided, then result will be an empty list.
  */
 public final class Zipper {
-    private Zipper() {
-    }
+    private Zipper() { }
 
     /**
      * Zip provided list of lists. Equivalent to:
@@ -90,21 +90,23 @@ public final class Zipper {
         Objects.requireNonNull(source);
         if (target.isEmpty()) {
             target.addAll(source.stream().map(List::of).map(ArrayList::new).toList());
-            return;
-        }
-        final var size = Math.min(target.size(), source.size());
-        target.subList(size, target.size()).clear();
-        for (int i = 0; i < size; ++i) {
-            target.get(i).add(source.get(i));
+        } else {
+            insertIntoSmallestSubset(target, source, List::add);
         }
     }
 
     private static <T> List<List<T>> zipCollectorCombiner(final List<List<T>> list1, final List<List<T>> list2) {
-        final var size = Math.min(list1.size(), list2.size());
-        list1.subList(size, list1.size()).clear();
-        for (int i = 0; i < size; ++i) {
-            list1.get(i).addAll(list2.get(i));
-        }
+        insertIntoSmallestSubset(list1, list2, List::addAll);
         return list1;
+    }
+
+    private static <U, V> void insertIntoSmallestSubset(final List<U> target,
+                                                        final List<V> other,
+                                                        final BiConsumer<U, V> inserter) {
+        final var size = Math.min(target.size(), other.size());
+        target.subList(size, target.size()).clear();
+        for (int i = 0; i < target.size(); ++i) {
+            inserter.accept(target.get(i), other.get(i));
+        }
     }
 }
