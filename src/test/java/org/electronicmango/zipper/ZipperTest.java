@@ -359,4 +359,37 @@ class ZipperTest {
         final var expectedOutput = List.of(List.of('1', '1'), List.of('2', '2'), List.of('3', '3'));
         assertEquals(expectedOutput, output);
     }
+
+    @Test
+    void shouldZipToEmptyListIfFirstSublistIsEmpty() {
+        //given
+        final var input = List.of(Collections.<Double>emptyList(), List.of(1.1, 2.2, 3.3), List.of(4.4, 5.5, 6.6));
+
+        //when
+        final var output = Zipper.zip(input);
+
+        //then
+        assertTrue(output.isEmpty());
+    }
+
+    @Test
+    void shouldVarargZipToEmptyListIfFirstSublistIsEmpty() {
+        //when
+        final var output = Zipper.zip(Collections.emptyList(), List.of(1.1, 2.2, 3.3), List.of(4.4, 5.5, 6.6));
+
+        //then
+        assertTrue(output.isEmpty());
+    }
+
+    @Test
+    void shouldCollectToEmptyListIfFirstSublistIsEmpty() {
+        //given
+        final var input = List.of(Collections.<Double>emptyList(), List.of(1.1, 2.2, 3.3), List.of(4.4, 5.5, 6.6));
+
+        //when
+        final var output = input.stream().collect(Zipper.zipCollector());
+
+        //then
+        assertTrue(output.isEmpty());
+    }
 }

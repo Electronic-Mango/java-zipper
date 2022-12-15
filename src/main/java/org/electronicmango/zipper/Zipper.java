@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 /**
  * Utility class providing various static methods performing Python-style "zip" operation on multiple lists of elements.
@@ -22,10 +23,13 @@ public final class Zipper {
     private Zipper() { }
 
     /**
-     * Zip provided list of lists. Equivalent to:
+     * Zip provided list of lists. For example:
      * <pre>
-     *     lists.stream().collect(Zipper.zipCollector());
+     *     final var list = List.of(List.of(1, 2, 3), List.of(4, 5, 6));
+     *     Zipper.zip(list);
      * </pre>
+     * will result in [[1, 4], [2, 5], [3, 6]].
+     * <p>
      * Resulting list is a new, mutable list, not a view of the input.
      * <p>
      * See {@link Zipper} for more details regarding zipping.
@@ -39,13 +43,17 @@ public final class Zipper {
      */
     public static <T> List<List<T>> zip(final List<? extends List<T>> lists) {
         Objects.requireNonNull(lists);
-        return lists.stream().peek(Objects::requireNonNull).collect(zipCollector());
+        lists.forEach(Objects::requireNonNull);
+        if (lists.stream().anyMatch(List::isEmpty)) {
+            return new ArrayList<>();
+        }
+        final List<List<T>> target = new ArrayList<>();
+        return lists.stream().reduce(target, Zipper::zipAccumulator, Zipper::zipCombiner);
     }
 
     /**
      * Zip provided lists. Lists can be provided as an array, or as multiple arguments. Equivalent to:
      * <pre>
-     *     Arrays.stream(lists).collect(Zipper.zipCollector());
      *     Zipper.zip(Arrays.asList(lists));
      * </pre>
      * Resulting list is a new, mutable list, not a view of the input.
@@ -61,8 +69,7 @@ public final class Zipper {
      */
     @SafeVarargs
     public static <T> List<List<T>> zip(final List<T>... lists) {
-        Objects.requireNonNull(lists);
-        return Arrays.stream(lists).peek(Objects::requireNonNull).collect(zipCollector());
+        return zip(Arrays.asList(lists));
     }
 
     /**
@@ -71,6 +78,8 @@ public final class Zipper {
      *     Stream.of(List.of(1, 2, 3), List.of(4, 5, 6)).collect(zipCollector());
      * </pre>
      * will result in [[1, 4], [2, 5], [3, 6]].
+     * <p>
+     * Using this collector is equivalent to collecting stream to list and calling {@link Zipper#zip(List)}.
      * <p>
      * Result of collecting is a new, mutable list of lists.
      * <p>
@@ -83,19 +92,20 @@ public final class Zipper {
      * @return collector used to zipping lists as Stream API elements
      */
     public static <T> Collector<List<T>, List<List<T>>, List<List<T>>> zipCollector() {
-        return Collector.of(ArrayList::new, Zipper::zipCollectorAccumulator, Zipper::zipCollectorCombiner);
+        return Collector.of(ArrayList::new, List::add, Zipper::combineLists, Zipper::zip);
     }
 
-    private static <T> void zipCollectorAccumulator(final List<List<T>> target, final List<T> source) {
+    private static <T> List<List<T>> zipAccumulator(final List<List<T>> target, final List<T> source) {
         Objects.requireNonNull(source);
         if (target.isEmpty()) {
             target.addAll(source.stream().map(List::of).map(ArrayList::new).toList());
         } else {
             insertIntoSmallestSubset(target, source, List::add);
         }
+        return target;
     }
 
-    private static <T> List<List<T>> zipCollectorCombiner(final List<List<T>> list1, final List<List<T>> list2) {
+    private static <T> List<List<T>> zipCombiner(final List<List<T>> list1, final List<List<T>> list2) {
         insertIntoSmallestSubset(list1, list2, List::addAll);
         return list1;
     }
@@ -103,10 +113,14 @@ public final class Zipper {
     private static <U, V> void insertIntoSmallestSubset(final List<U> target,
                                                         final List<V> other,
                                                         final BiConsumer<U, V> inserter) {
-        final var size = Math.min(target.size(), other.size());
+        final int size = Math.min(target.size(), other.size());
         target.subList(size, target.size()).clear();
         for (int i = 0; i < target.size(); ++i) {
             inserter.accept(target.get(i), other.get(i));
         }
+    }
+
+    private static <T> List<T> combineLists(final List<T> list1, final List<T> list2) {
+        return Stream.of(list1, list2).flatMap(List::stream).toList();
     }
 }
