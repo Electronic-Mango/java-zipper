@@ -1,12 +1,11 @@
 package org.electronicmango.zipper;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 import java.util.stream.Collector;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Utility class providing various static methods performing Python-style "zip" operation on multiple lists of elements.
@@ -44,11 +43,10 @@ public final class Zipper {
     public static <T> List<List<T>> zip(final List<? extends List<T>> lists) {
         Objects.requireNonNull(lists);
         lists.forEach(Objects::requireNonNull);
-        if (lists.stream().anyMatch(List::isEmpty)) {
-            return new ArrayList<>();
-        }
-        final List<List<T>> target = new ArrayList<>();
-        return lists.stream().reduce(target, Zipper::zipAccumulator, Zipper::zipCombiner);
+        final int resultSize = lists.stream().mapToInt(List::size).min().orElse(0);
+        return IntStream.range(0, resultSize)
+                .mapToObj(i -> lists.stream().map(list -> list.get(i)).collect(Collectors.toList()))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -79,7 +77,10 @@ public final class Zipper {
      * </pre>
      * will result in [[1, 4], [2, 5], [3, 6]].
      * <p>
-     * Using this collector is equivalent to collecting stream to list and calling {@link Zipper#zip(List)}.
+     * Using this collector is equivalent to collecting stream to list and calling {@link Zipper#zip(List)}:
+     * <pre>
+     *     Collectors.collectingAndThen(Collectors.toList(), Zipper::zip);
+     * </pre>
      * <p>
      * Result of collecting is a new, mutable list of lists.
      * <p>
@@ -91,36 +92,7 @@ public final class Zipper {
      * @param <T> type stored in lists in stream
      * @return collector used to zipping lists as Stream API elements
      */
-    public static <T> Collector<List<T>, List<List<T>>, List<List<T>>> zipCollector() {
-        return Collector.of(ArrayList::new, List::add, Zipper::combineLists, Zipper::zip);
-    }
-
-    private static <T> List<List<T>> zipAccumulator(final List<List<T>> target, final List<T> source) {
-        Objects.requireNonNull(source);
-        if (target.isEmpty()) {
-            target.addAll(source.stream().map(List::of).map(ArrayList::new).toList());
-        } else {
-            insertIntoSmallestSubset(target, source, List::add);
-        }
-        return target;
-    }
-
-    private static <T> List<List<T>> zipCombiner(final List<List<T>> list1, final List<List<T>> list2) {
-        insertIntoSmallestSubset(list1, list2, List::addAll);
-        return list1;
-    }
-
-    private static <U, V> void insertIntoSmallestSubset(final List<U> target,
-                                                        final List<V> other,
-                                                        final BiConsumer<U, V> inserter) {
-        final int size = Math.min(target.size(), other.size());
-        target.subList(size, target.size()).clear();
-        for (int i = 0; i < target.size(); ++i) {
-            inserter.accept(target.get(i), other.get(i));
-        }
-    }
-
-    private static <T> List<T> combineLists(final List<T> list1, final List<T> list2) {
-        return Stream.of(list1, list2).flatMap(List::stream).toList();
+    public static <T> Collector<List<T>, ?, List<List<T>>> zipCollector() {
+        return Collectors.collectingAndThen(Collectors.toList(), Zipper::zip);
     }
 }
