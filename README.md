@@ -17,7 +17,7 @@ Library is available in [Maven Central](https://search.maven.org/artifact/io.git
 <dependency>
     <groupId>io.github.electronic-mango</groupId>
     <artifactId>zipper</artifactId>
-    <version>1.3</version>
+    <version>1.4</version>
 </dependency>
 ```
 
