@@ -80,7 +80,7 @@ final output = Stream.of(List.of(1, 1, 1), List.of(2, 2, 2)).collect(Zipper.zipC
 
 **Since order of output elements is correlated to order of input elements using unordered and/or parallel streams might cause unexpected results!**
 
-Calling two previous methods is equivalent to streaming their inputs and using this collector.
+Using this collector is equivalent to collecting elements into a list and zipping the resulting collection via the first method.
 
 
 ### `NullPointerException`
